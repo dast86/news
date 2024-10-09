@@ -4,7 +4,6 @@ import styles from "./styles.module.css"
 
 function Skeleton({ count = 1, type = "banner" }) {
 
-    // Разобрать тут подробно с [...Array(count)].map((_, index)
     return (
         <>
             {count > 1 ?
