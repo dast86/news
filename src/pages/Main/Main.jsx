@@ -6,6 +6,8 @@ import NewsList from "../../components/NewsList/NewsList"
 import Skeleton from "../../components/Skeleton/Skeleton"
 import Pagination from "../../components/Pagination/Pagination"
 import Categories from "../../components/Categories/Categories"
+import Search from "../../components/Search/Search"
+import { useDebounce } from "../../helpers/useDebounce"
 
 
 
@@ -14,10 +16,13 @@ function Main() {
     const [loding, setLoding] = useState(true)
     const [currentPuge, setCurrentPage] = useState(1)
     const [categories, setCategories] = useState([])
+    const [keywords, setKeywords] = useState('')
     const [selectrdCategories, setSelectrdCategories] = useState("All")
     const totalPage = 10
     const pageSize = 10
+    const debounce = useDebounce(keywords, 1500)
 
+    // console.log(keywords)
 
     const handelNextPage = ()=>{
         if (currentPuge < totalPage) {
@@ -54,7 +59,8 @@ function Main() {
                 {
                     page_number: currentPuge, 
                     page_size: pageSize, 
-                    category: selectrdCategories === "All" ? null :selectrdCategories
+                    category: selectrdCategories === "All" ? null :selectrdCategories,
+                    keywords: keywords,
                 }
             )
             setNews(response.news)
@@ -67,7 +73,7 @@ function Main() {
     
     useEffect(()=>{
         fetchNews(currentPuge)
-    },[currentPuge, selectrdCategories])
+    },[currentPuge, selectrdCategories,debounce])
     
         useEffect(()=>{
             fetcCategories()
@@ -75,13 +81,12 @@ function Main() {
     
     return (
         <main className={styles.main}>
+            <Search keywords={keywords} setKeywords={setKeywords} />
             <Categories
              selectrdCategories={selectrdCategories}  
              setSelectrdCategories={setSelectrdCategories}
              categories={categories}
-
              />
-
 
            {news.length>0 && !loding? <NewsBanner item={news[0]}/> : <Skeleton count={1} type="banner"/> }
            
