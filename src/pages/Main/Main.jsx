@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import NewsBanner from "../../components/NewsBanner/NewsBanner"
+import NewsBannerWithSkeleton  from "../../components/NewsBanner/NewsBanner"
 import styles from "./styles.module.css"
 import { getNews, getCategories } from "../../api/apiNews"
-import NewsList from "../../components/NewsList/NewsList"
-import Skeleton from "../../components/Skeleton/Skeleton"
+import NewsListWithSkeleton from "../../components/NewsList/NewsList"
 import Pagination from "../../components/Pagination/Pagination"
 import Categories from "../../components/Categories/Categories"
 import Search from "../../components/Search/Search"
-import { useDebounce } from "../../helpers/useDebounce"
+import {useDebounce} from "../../helpers/hooks/useDebounce"
+import { PAGE_SIZE, TOTAL_PAGE } from "../../constants/constants"
 
 
 
@@ -18,14 +18,11 @@ function Main() {
     const [categories, setCategories] = useState([])
     const [keywords, setKeywords] = useState('')
     const [selectrdCategories, setSelectrdCategories] = useState("All")
-    const totalPage = 10
-    const pageSize = 10
     const debounce = useDebounce(keywords, 1500)
 
-    // console.log(keywords)
 
     const handelNextPage = ()=>{
-        if (currentPuge < totalPage) {
+        if (currentPuge < TOTAL_PAGE) {
             setCurrentPage(currentPuge + 1)
             console.log('heandelClickPlus')
         }
@@ -58,7 +55,7 @@ function Main() {
             const response = await getNews(
                 {
                     page_number: currentPuge, 
-                    page_size: pageSize, 
+                    page_size: PAGE_SIZE, 
                     category: selectrdCategories === "All" ? null :selectrdCategories,
                     keywords: keywords,
                 }
@@ -88,21 +85,24 @@ function Main() {
              categories={categories}
              />
 
-           {news.length>0 && !loding? <NewsBanner item={news[0]}/> : <Skeleton count={1} type="banner"/> }
+           {/* {news.length>0 && !loding? <NewsBanner item={news[0]}/> : <Skeleton count={1} type="banner"/> } */}
+
+           <NewsBannerWithSkeleton item={news.length>0 && news[0]} loding={loding}/>
            
            
            <Pagination 
-           totalPage={totalPage} 
+           totalPage={TOTAL_PAGE} 
            handelNextPage={handelNextPage}
            handelPreviousPage={handelPreviousPage}
            handleClickPage={handleClickPage}
            currentPuge={currentPuge}
            />
 
-           {loding ? <Skeleton count={10} type="item"/>: <NewsList news={news}/>}
+            <NewsListWithSkeleton loding={loding} news={news}/>
+           {/* {loding ? <Skeleton count={10} type="item"/>: <NewsList news={news}/>} */}
 
            <Pagination 
-           totalPage={totalPage} 
+           totalPage={TOTAL_PAGE} 
            handelNextPage={handelNextPage}
            handelPreviousPage={handelPreviousPage}
            handleClickPage={handleClickPage}
