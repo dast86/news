@@ -23,15 +23,16 @@ function Main() {
     const [selectrdCategories, setSelectrdCategories] = useState("All")
     const debounce = useDebounce(keywords, 1500)
 
-    // const { data, loding } = useFetch(getNews, {
-    //     page_number: currentPuge,
-    //     page_size: PAGE_SIZE,
-    //     category: selectrdCategories === "All" ? null : selectrdCategories,
-    //     keywords: debounce,
-    // })
+    const { data, loding } = useFetch(getNews, {
+        page_number: currentPuge,
+        page_size: PAGE_SIZE,
+        category: selectrdCategories === "All" ? null : selectrdCategories,
+        keywords: debounce,
+    })
     const { data: dataCategories } = useFetch(getCategories)
 
-    console.log(dataCategories.categories)
+    // console.log(dataCategories.categories
+    // )
 
     const handelNextPage = () => {
         if (currentPuge < TOTAL_PAGE) {
@@ -91,15 +92,13 @@ function Main() {
     return (
         <main className={styles.main}>
             <Search keywords={keywords} setKeywords={setKeywords} />
-            {/* <Categories
+           {dataCategories ? <Categories
                 selectrdCategories={selectrdCategories}
                 setSelectrdCategories={setSelectrdCategories}
-                categories={categories}
-            /> */}
+                categories={dataCategories.categories}
+            />: null}
 
-            {/* {news.length>0 && !loding? <NewsBanner item={news[0]}/> : <Skeleton count={1} type="banner"/> } */}
-
-            {/* <NewsBannerWithSkeleton item={data && data.news && data.news[0]} loding={loding} /> */}
+            <NewsBannerWithSkeleton item={data && data.news && data.news[0]} loding={loding} />
 
 
             <Pagination
@@ -110,8 +109,7 @@ function Main() {
                 currentPuge={currentPuge}
             />
 
-            {/* <NewsListWithSkeleton loding={loding} news={data?.news} /> */}
-            {/* {loding ? <Skeleton count={10} type="item"/>: <NewsList news={news}/>} */}
+            <NewsListWithSkeleton loding={loding} news={data?.news} />
 
             <Pagination
                 totalPage={TOTAL_PAGE}
