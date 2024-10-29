@@ -1,8 +1,14 @@
 import styles from "./styles.module.css"
 
+interface PaginationProps {
+    totalPage:number;
+    handelNextPage: ()=> void;
+    handelPreviousPage: ()=> void;
+    handleClickPage: (param:number)=> void;
+    currentPuge:number; 
+}
 
-
-function Pagination(props) {
+function Pagination(props:PaginationProps) {
 
     const {totalPage,handelNextPage,handelPreviousPage,handleClickPage,currentPuge} = props
     return (

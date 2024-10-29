@@ -1,8 +1,12 @@
+import { FC } from "react";
 import styles from "./styles.module.css"
 
+interface SearcgProps {
+    keywords: string; 
+    setKeywords: (event:string) => void
+}
 
-
-function Search({keywords,setKeywords}) {
+const Search:FC<SearcgProps> = ({keywords,setKeywords}) => {
 
     return (
      <div className={styles.search}>

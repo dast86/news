@@ -1,10 +1,16 @@
+import { FC } from "react"
 import { formatTimeAgo } from "../../helpers/formatTimeAgo"
+import withSkeleton from "../../helpers/hoc/withSkeleton"
 import Image from "../Image/Image"
 import styles from "./styles.module.css"
+import { BannerAndNewsItem } from "../../interface"
 
 
+ interface NewsBannerProps {
+    item: BannerAndNewsItem 
+  }
 
-function NewsBanner({ item }) {
+const NewsBanner:FC<NewsBannerProps> = ({ item }) => {
 
     return (
         <div className={styles.banner}>
@@ -15,4 +21,6 @@ function NewsBanner({ item }) {
     )
 }
 
-export default NewsBanner
+const NewsBannerWithSkeleton = withSkeleton(NewsBanner,'banner', 1)
+
+export default NewsBannerWithSkeleton

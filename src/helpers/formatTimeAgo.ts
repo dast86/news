@@ -1,4 +1,10 @@
-export const formatTimeAgo = (dateString) =>{
+
+
+
+
+
+
+export const formatTimeAgo = (dateString:string) =>{
 const now = new Date(); 
 const date = new Date(dateString); 
 const secondePast = (now.getTime() - date.getTime()) / 1000

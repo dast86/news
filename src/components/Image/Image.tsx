@@ -1,10 +1,12 @@
-import { formatTimeAgo } from "../../helpers/formatTimeAgo"
 
 import styles from "./styles.module.css"
 
 
+interface ImageProps {
+    image: string
+}
 
-function Image({ image }) {
+function Image({ image }:ImageProps) {
 
     return (
         <div className={styles.wrapper}>
