@@ -1,9 +1,21 @@
 import { useEffect, useState } from "react"
 
-export const useFetch = (fetchFunction, params) => {
-    const [data, setData] = useState(null)
-    const [loding, setLoding] = useState(true)
-    const [error, setError] = useState(null)
+// Описываю что будет возвращать fetchFunction
+interface FetchFunction <P, T> {
+    (params?: P): Promise <T>
+}
+
+interface UseFetchResult <T>{ 
+    data: T | null | undefined;
+    loding: boolean;
+    error: Error | null; 
+}
+
+
+export const useFetch = <T,P>(fetchFunction:FetchFunction<P, T>, params?:P) :UseFetchResult<T>=>{
+    const [data, setData] = useState<T | null>(null)
+    const [loding, setLoding] = useState<boolean>(true)
+    const [error, setError] = useState <Error | null>(null)
     
     // для того, что бы в useEffect было проще сравнивать параметр params, то его нужно перобразовать в строку, ведь это у нас объект
     const stringParams = params ? new URLSearchParams(params).toString(): ""; 
@@ -16,7 +28,7 @@ export const useFetch = (fetchFunction, params) => {
 
                 setData(result)
             } catch (error) {
-                setError(error)
+                setError(error as Error)
             }
             finally {
                 setLoding(false)

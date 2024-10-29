@@ -9,21 +9,21 @@ import Search from "../../components/Search/Search"
 import { useDebounce } from "../../helpers/hooks/useDebounce"
 import { PAGE_SIZE, TOTAL_PAGE } from "../../constants/constants"
 import { useFetch } from "../../helpers/hooks/useFetch"
+import { NewsApiResponse, ParamsType } from "../../interface"
+
+
 
 
 
 
 
 function Main() {
-    // const [news, setNews] = useState([])
-    // const [loding, setLoding] = useState(true)
     const [currentPuge, setCurrentPage] = useState(1)
-    // const [categories, setCategories] = useState([])
     const [keywords, setKeywords] = useState('')
     const [selectrdCategories, setSelectrdCategories] = useState("All")
     const debounce = useDebounce(keywords, 1500)
 
-    const { data, loding } = useFetch(getNews, {
+    const { data, loding } = useFetch<NewsApiResponse,ParamsType>(getNews, {
         page_number: currentPuge,
         page_size: PAGE_SIZE,
         category: selectrdCategories === "All" ? null : selectrdCategories,
@@ -31,63 +31,23 @@ function Main() {
     })
     const { data: dataCategories } = useFetch(getCategories)
 
-    // console.log(dataCategories.categories
-    // )
 
-    const handelNextPage = () => {
+    const handelNextPage = () :void => {
         if (currentPuge < TOTAL_PAGE) {
             setCurrentPage(currentPuge + 1)
-            console.log('heandelClickPlus')
         }
     }
 
-    const handelPreviousPage = () => {
+    const handelPreviousPage = () : void => {
         if (currentPuge > 1) {
-            console.log('heandelClickMinus')
             setCurrentPage(currentPuge - 1)
         }
     }
-    const handleClickPage = (page) => {
+    const handleClickPage = (page:number) :void => {
         setCurrentPage(page)
-        console.log('clickPage')
 
     }
 
-    // const fetcCategories = async () => {
-    //     try {
-    //         const response = await getCategories()
-    //         setCategories(["All", ...response.categories])
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
-    // const fetchNews = async (currentPuge) => {
-    //     try {
-    //         setLoding(true)
-    //         const response = await getNews(
-    //             {
-    //                 page_number: currentPuge,
-    //                 page_size: PAGE_SIZE,
-    //                 category: selectrdCategories === "All" ? null : selectrdCategories,
-    //                 keywords: keywords,
-    //             }
-    //         )
-    //         setNews(response.news)
-    //         setLoding(false)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-
-
-    // useEffect(() => {
-    // fetchNews(currentPuge)
-    // }, [currentPuge, selectrdCategories, debounce])
-
-    // useEffect(() => {
-    //     fetcCategories()
-    // }, [])
 
     return (
         <main className={styles.main}>
@@ -98,7 +58,8 @@ function Main() {
                 categories={dataCategories.categories}
             />: null}
 
-            <NewsBannerWithSkeleton item={data && data.news && data.news[0]} loding={loding} />
+            <NewsBannerWithSkeleton item={data?.news[0] || { author: "", title: "", image: "", published: "", id: "" }} loding={loding} /> 
+            
 
 
             <Pagination
@@ -109,7 +70,7 @@ function Main() {
                 currentPuge={currentPuge}
             />
 
-            <NewsListWithSkeleton loding={loding} news={data?.news} />
+            <NewsListWithSkeleton loding={loding} news={data?.news || [] } />
 
             <Pagination
                 totalPage={TOTAL_PAGE}

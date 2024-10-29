@@ -1,6 +1,13 @@
+import { FC } from "react";
 import styles from "./styles.module.css";
 
-function Categories({ categories, setSelectrdCategories, selectrdCategories }) {
+interface CategoriesProps  {
+  categories :string[]; 
+  setSelectrdCategories: (category:string) => void;
+  selectrdCategories: string;
+}
+
+const Categories:FC<CategoriesProps> = ({ categories, setSelectrdCategories, selectrdCategories }) => {
   const allCategories = ["All", ...categories];
   return (
     <div className={styles.categories}>

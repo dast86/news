@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 
 
-export const useDebounce = (value, deplay) => {
+export const useDebounce = (value:string, deplay:number) => {
     const [debounceValue, setDebounceValue] = useState('');
 
 
