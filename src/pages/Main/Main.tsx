@@ -1,7 +1,7 @@
 import { useState } from "react"
 import NewsBannerWithSkeleton from "../../components/NewsBanner/NewsBanner"
 import styles from "./styles.module.css"
-import { getNews, getCategories } from "../../api/apiNews"
+import { getCategories } from "../../api/apiNews"
 import NewsListWithSkeleton from "../../components/NewsList/NewsList"
 import Pagination from "../../components/Pagination/Pagination"
 import Categories from "../../components/Categories/Categories"
@@ -9,7 +9,7 @@ import Search from "../../components/Search/Search"
 import { useDebounce } from "../../helpers/hooks/useDebounce"
 import { PAGE_SIZE, TOTAL_PAGE } from "../../constants/constants"
 import { useFetch } from "../../helpers/hooks/useFetch"
-import { NewsApiResponse, ParamsType } from "../../interface"
+import { useGetNewsQuery } from "../../store/services/newsApi"
 
 
 
@@ -23,12 +23,17 @@ function Main() {
     const [selectrdCategories, setSelectrdCategories] = useState("All")
     const debounce = useDebounce(keywords, 1500)
 
-    const { data, loding } = useFetch<NewsApiResponse,ParamsType>(getNews, {
+// Тут мы импортировали наш RTK Query и указали в нем параметры, которые он должен прнимать
+    const { data, error, isLoading:loding } = useGetNewsQuery({
         page_number: currentPuge,
         page_size: PAGE_SIZE,
         category: selectrdCategories === "All" ? null : selectrdCategories,
         keywords: debounce,
     })
+
+
+
+
     const { data: dataCategories } = useFetch(getCategories)
 
 
